@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    color: white;
+}
+
+#musicBtn {
+    font-family: 'Luckiest Guy', cursive;
+    color: rgb(255, 255, 255);
+    padding: 20px 40px;
+    height: 80px;
+    background-color: #464646;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+#startBtn {
+    font-family: 'Luckiest Guy', cursive;
+    color: rgb(0, 0, 0);
+}
+
+.container {
+    margin: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
+
+.question, .result, .timer {
+    margin: 20px 0;
+    padding: 10px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    color: white;
+}
+
+.options button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.options button:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.result {
+    color: white;
+    font-weight: bold;
+}
+
+.timer {
+    font-weight: bold;
+    color: white;
+}

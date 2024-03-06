@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Quiz Interactivo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body bgcolor="#333333">
+
+<div class="container">
+    <button id="startBtn">Iniciar Quiz</button>
+    <div class="question"></div>
+    <div class="options"></div>
+    <div class="result"></div>
+    <div class="timer"></div>
+</div>
+
+<div class="centered-content">
+    <button id="musicBtn">Tocar/Pausar Música</button>
+    <audio id="backgroundMusic" loop>
+        <source src="musicabg.MP3" type="audio/mp3">
+        Tu navegador no soporta audio HTML5.
+    </audio>
+</div>
+
+
+<script>
+    
+const questions = [
+    {
+        question: "¿Qué significa HTML?",
+        options: [
+            "lenguaje demarcado de hipertexto",
+            "hipervisulizador de textos",
+            "hyper text viewer"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Para qué sirve HTML?",
+        options: [
+            "Para codificar páginas web",
+            "Para visualizar páginas web",
+            "Un motor de búsqueda para navegar en el internet"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Qué es un navegador web?",
+        options: [
+            "Programa para visualizar paginas web",
+            "programa de busqueda para buscar contenido en internet",
+            "programa para buscar cosas en el internet"
+        ],
+        correctAnswer: 0
+    },
+
+    {
+        question: "¿Cuál es la etiqueta en HTML",
+        options: [
+            "</>",
+            "[]",
+            "<></>"
+        ],
+        correctAnswer: 3
+    },
+    {
+        question: "¿Para qué sirven las etiquetas en HTML?",
+        options: [
+            "Para comenzar a dar una intrución",
+            "Para dar una intrución",
+            "Todas las anteriores"
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Qué etiquetas HTML no tienen etiqueta de cierre?",
+        options: [
+            "<br>, <img>, <input>, <hr>",
+            "<title>, <div>, <p>",
+            "<head>, <table>, <footer>",
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Para qué sirve la etiqueta <br>?",
+        options: [
+            "Para insertar un salto de línea",
+            "Para agregar un espacio entre elementos",
+            "Para resaltar un texto",
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Para qué sirve la etiqueta <h1>?",
+        options: [
+            "Para crear un encabezado de nivel más alto",
+            "Para definir un texto en cursiva",
+            "Para marcar un elemento importante",
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Para qué sirve la etiqueta <center>?",
+        options: [
+            "Para centrar contenido, ahora obsoleta",
+            "Para justificar texto a la derecha",
+            "Para aumentar el tamaño del texto",
+        ],
+        correctAnswer: 0
+    },
+    {
+        question: "¿Cómo se cambia el color de fondo de una página web (HTML)?",
+        options: [
+            "Usando CSS con la propiedad background-color",
+            "Con el atributo bgcolor en la etiqueta <body>",
+            "Utilizando la etiqueta <background>",
+        ],
+        correctAnswer: 0
+    }
+    
+];
+
+let usedIndexes = [];
+let timer = null;
+
+document.getElementById('musicBtn').addEventListener('click', function() {
+    var backgroundMusic = document.getElementById('backgroundMusic');
+    if (backgroundMusic.paused) {
+        backgroundMusic.play();
+    } else {
+        backgroundMusic.pause();
+    }
+});
+
+document.getElementById('startBtn').onclick = function() {
+    this.style.display = 'none';
+    showQuestion();
+};
+
+function getUniqueQuestionIndex() {
+    let index;
+    do {
+        index = Math.floor(Math.random() * questions.length);
+    } while (usedIndexes.includes(index));
+    return index;
+}
+
+function showQuestion() {
+    if (usedIndexes.length === questions.length) {
+        document.querySelector('.question').innerText = "Quiz completado!";
+        document.querySelector('.options').innerHTML = '';
+        return;
+    }
+
+    let questionIndex = getUniqueQuestionIndex();
+    usedIndexes.push(questionIndex);
+
+    const q = questions[questionIndex];
+
+    document.querySelector('.question').innerText = q.question;
+    document.querySelector('.options').innerHTML = '';
+    
+    q.options.forEach((option, index) => {
+        let btn = document.createElement('button');
+        btn.innerText = option;
+        btn.onclick = function() { checkAnswer(questionIndex, index); };
+        document.querySelector('.options').appendChild(btn);
+    });
+
+    resetTimer();
+}
+
+function checkAnswer(questionIndex, answerIndex) {
+    if (answerIndex === questions[questionIndex].correctAnswer) {
+        document.querySelector('.result').innerText = "Correcto!";
+        clearTimeout(timer);
+        setTimeout(showQuestion, 10000); // 10 seconds delay
+    } else {
+        document.querySelector('.result').innerText = "Incorrecto!";
+        document.querySelector('.options').innerHTML = ''; // Limpiar opciones
+        document.querySelector('.question').innerHTML = '<img src="perrollorando.jpg" alt="Perro llorando" style="max-width:100%;height:auto;">'; // Mostrar imagen
+        clearTimeout(timer);
+        setTimeout(resetQuiz, 10000); // Reiniciar quiz después de 10 segundos
+    }
+}
+
+function resetQuiz() {
+    document.querySelector('.result').innerText = ""; // Limpiar resultado
+    document.querySelector('.timer').innerText = ""; // Limpiar temporizador
+    usedIndexes = []; // Restablecer índices de preguntas usadas
+    document.getElementById('startBtn').style.display = 'block'; // Mostrar botón de inicio
+}
+
+function resetTimer() {
+    let timeLeft = 10;
+    document.querySelector('.timer').innerText = `Tiempo restante: ${timeLeft} segundos`;
+    timer = setInterval(function() {
+        timeLeft--;
+        document.querySelector('.timer').innerText = `Tiempo restante: ${timeLeft} segundos`;
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            showQuestion();
+        }
+    }, 1000);
+}
+</script>
+
+</body>
+<br>
+<h5> <center>Programado por Pablo :D <em>no chatgpt XD bueno un poco :></em></center></h5>
+
+</html>
